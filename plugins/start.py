@@ -22,7 +22,7 @@ async def encode(string):
 
 async def decode(base64_string):
     try:
-        base64_string = base64_string.strip("=") # links generated before this commit will be having = sign, hence striping them to handle padding errors.
+        base64_string = base64_string.strip("=")
         base64_bytes = (base64_string + "=" * (-len(base64_string) % 4)).encode("ascii")
         string_bytes = base64.urlsafe_b64decode(base64_bytes) 
         string = string_bytes.decode("ascii")
@@ -34,20 +34,20 @@ async def decode(base64_string):
 async def start(client, message):
     if not await checkdb.is_user_exist(message.from_user.id):
         await db.add_user(message.from_user.id, message.from_user.first_name)
-        name = await client.ask(message.chat.id, "<b>Welcome To VJ Disk.\n\nIts Time To Create Account On VJ Disk\n\nNow Send Me Your Business Name Which Show On Website\nEx :- <code>Tech VJ</code></b>")
+        name = await client.ask(message.chat.id, "<b>Welcome To CodeX OTT.\n\nLet's Create Your Account!\n\nSend Me Your Business Name Which Will Show On Website\nEx :- <code>CodeX OTT</code></b>")
         if name.text:
             await db.set_name(message.from_user.id, name=name.text)
         else:
-            return await message.reply("**Wrong Input Start Your Process Again By Hitting /start**")
-        link = await client.ask(message.chat.id, "<b>Now Send Me Your Telegram Channel Link, Channel Link Will Show On Your Website.\n\nSend Like This <code>https://t.me/VJ_Bots</code> ✅\n\nDo not send like this @VJ_Bots ❌</b>")
+            return await message.reply("**Wrong Input! Start Again By Hitting /start**")
+        link = await client.ask(message.chat.id, "<b>Now Send Me Your Telegram Channel Link. It Will Show On Your Website.\n\nSend Like This <code>https://t.me/CODExMOMO</code> ✅\n\nDo Not Send Like This @CODExMOMO ❌</b>")
         if link.text and link.text.startswith(('http://', 'https://')):
             await db.set_link(message.from_user.id, link=link.text)
         else:
-            return await message.reply("**Wrong Input Start Your Process Again By Hitting /start**")
+            return await message.reply("**Wrong Input! Start Again By Hitting /start**")
         await checkdb.add_user(message.from_user.id, message.from_user.first_name)
-        return await message.reply("<b>Congratulations 🎉\n\nYour Account Created Successfully.\n\nFor Uploading File In Quality Option Use Command /quality\n\nMore Commands Are /account and /update and /withdraw\n\nFor Without Quality Option Direct Send File To Bot.</b>")
+        return await message.reply("<b>Congratulations 🎉\n\nYour Account Created Successfully!\n\nTo Upload File With Quality Options Use /quality\n\nOther Commands: /account | /update | /withdraw\n\nFor Direct Upload Without Quality Option — Just Send File To Bot.</b>")
     else:
-        rm = InlineKeyboardMarkup([[InlineKeyboardButton("✨ Update Channel", url="https://t.me/VJ_Disk")]])
+        rm = InlineKeyboardMarkup([[InlineKeyboardButton("✨ Join CodeX OTT", url="https://t.me/CODExMOMO")]])
         await client.send_message(
             chat_id=message.from_user.id,
             text=script.START_TXT.format(message.from_user.mention),
@@ -60,19 +60,19 @@ async def start(client, message):
 async def update(client, message):
     vj = True
     if vj:
-        name = await client.ask(message.chat.id, "<b>Now Send Me Your Business Name Which Show On Website\nEx :- <code>Tech VJ</code>\n\n/cancel - cancel the process</b>")
+        name = await client.ask(message.chat.id, "<b>Send Me Your Business Name Which Will Show On Website\nEx :- <code>CodeX OTT</code>\n\n/cancel - Cancel The Process</b>")
         if name.text == "/cancel":
             return await message.reply("**Process Cancelled**")
         if name.text:
             await db.set_name(message.from_user.id, name=name.text)
         else:
-            return await message.reply("**Wrong Input Start Your Process Again By Hitting /update**")
-        link = await client.ask(message.chat.id, "<b>Now Send Me Your Telegram Channel Link, Channel Link Will Show On Your Website.\n\nSend Like This <code>https://t.me/VJ_Bots</code> ✅\n\nDo not send like this @VJ_Bots ❌</b>")
+            return await message.reply("**Wrong Input! Start Again By Hitting /update**")
+        link = await client.ask(message.chat.id, "<b>Now Send Me Your Telegram Channel Link.\n\nSend Like This <code>https://t.me/CODExMOMO</code> ✅\n\nDo Not Send Like This @CODExMOMO ❌</b>")
         if link.text and link.text.startswith(('http://', 'https://')):
             await db.set_link(message.from_user.id, link=link.text)
         else:
-            return await message.reply("**Wrong Input Start Your Process Again By Hitting /update**")
-        return await message.reply("<b>Update Successfully.</b>")
+            return await message.reply("**Wrong Input! Start Again By Hitting /update**")
+        return await message.reply("<b>Updated Successfully ✅</b>")
 
 @Client.on_message(filters.private & (filters.document | filters.video))
 async def stream_start(client, message):
@@ -84,7 +84,7 @@ async def stream_start(client, message):
     url1 = f"{urlencode(params)}"
     link = await encode(url1)
     encoded_url = f"{LINK_URL}?Tech_VJ={link}"
-    rm=InlineKeyboardMarkup([[InlineKeyboardButton("🖇️ Open Link", url=encoded_url)]])
+    rm = InlineKeyboardMarkup([[InlineKeyboardButton("🖇️ Open Link", url=encoded_url)]])
     await message.reply_text(text=f"<code>{encoded_url}</code>", reply_markup=rm)
 
 @Client.on_message(filters.private & filters.command("quality"))
@@ -92,7 +92,7 @@ async def quality_link(client, message):
     first_id = str(0)
     second_id = str(0)
     third_id = str(0)
-    first = await client.ask(message.from_user.id, "<b>Now Send Me Your Quality In Which You Upload File. Only Below These Qualities Are Available Only.\n\n1. If your file quality is less than or equal to 480p then send <code>480</code>\n2. If your file quality is greater than 480p and less than or equal to 720p then send <code>720</code>\n3. If your file quality is greater than 720p then send <code>1080</code></b>")
+    first = await client.ask(message.from_user.id, "<b>Send Me The Quality Of Your File.\n\n1. 480p or below → send <code>480</code>\n2. Above 480p upto 720p → send <code>720</code>\n3. Above 720p → send <code>1080</code></b>")
     if first.text == "480":
         f_id = await client.ask(message.from_user.id, "Now Send Me Your 480p Quality File.")
         if f_id.video or f_id.document:
@@ -101,7 +101,7 @@ async def quality_link(client, message):
             first_msg = await client.send_cached_media(chat_id=LOG_CHANNEL, file_id=fileid)
             first_id = str(first_msg.id)
         else:
-            return await message.reply("Wrong Input, Start Process Again By /quality")
+            return await message.reply("Wrong Input! Start Again By /quality")
     elif first.text == "720":
         s_id = await client.ask(message.from_user.id, "Now Send Me Your 720p Quality File.")
         if s_id.video or s_id.document:
@@ -110,7 +110,7 @@ async def quality_link(client, message):
             first_msg = await client.send_cached_media(chat_id=LOG_CHANNEL, file_id=fileid)
             second_id = str(first_msg.id)
         else:
-            return await message.reply("Wrong Input, Start Process Again By /quality")
+            return await message.reply("Wrong Input! Start Again By /quality")
     elif first.text == "1080":
         t_id = await client.ask(message.from_user.id, "Now Send Me Your 1080p Quality File.")
         if t_id.video or t_id.document:
@@ -119,11 +119,11 @@ async def quality_link(client, message):
             first_msg = await client.send_cached_media(chat_id=LOG_CHANNEL, file_id=fileid)
             third_id = str(first_msg.id)
         else:
-            return await message.reply("Wrong Input, Start Process Again By /quality")
+            return await message.reply("Wrong Input! Start Again By /quality")
     else:
-        return await message.reply("Choose Quality From Above Three Quality Only. Send /quality commamd again to start creating link.")
+        return await message.reply("Choose From 480, 720 or 1080 Only. Send /quality Again To Start.")
 
-    second = await client.ask(message.from_user.id, "<b>Now Send Me Your **Another** Quality In Which You Upload File. Only Below These Qualities Are Available Only.\n\n1. If your file quality is less than or equal to 480p then send <code>480</code>\n2. If your file quality is greater than 480p and less than or equal to 720p then send <code>720</code>\n3. If your file quality is greater than 720p then send <code>1080</code>\n\nNote Don not use one quality 2 or more time.</b>")
+    second = await client.ask(message.from_user.id, "<b>Send Me Another Quality.\n\n1. 480p or below → send <code>480</code>\n2. Above 480p upto 720p → send <code>720</code>\n3. Above 720p → send <code>1080</code>\n\nNote: Don't Use Same Quality Twice.</b>")
     if second.text != first.text and second.text == "480":
         f_id = await client.ask(message.from_user.id, "Now Send Me Your 480p Quality File.")
         if f_id.video or f_id.document:
@@ -132,7 +132,7 @@ async def quality_link(client, message):
             first_msg = await client.send_cached_media(chat_id=LOG_CHANNEL, file_id=fileid)
             first_id = str(first_msg.id)
         else:
-            return await message.reply("Wrong Input, Start Process Again By /quality")
+            return await message.reply("Wrong Input! Start Again By /quality")
     elif second.text != first.text and second.text == "720":
         s_id = await client.ask(message.from_user.id, "Now Send Me Your 720p Quality File.")
         if s_id.video or s_id.document:
@@ -141,7 +141,7 @@ async def quality_link(client, message):
             first_msg = await client.send_cached_media(chat_id=LOG_CHANNEL, file_id=fileid)
             second_id = str(first_msg.id)
         else:
-            return await message.reply("Wrong Input, Start Process Again By /quality")
+            return await message.reply("Wrong Input! Start Again By /quality")
     elif second.text != first.text and second.text == "1080":
         t_id = await client.ask(message.from_user.id, "Now Send Me Your 1080p Quality File.")
         if t_id.video or t_id.document:
@@ -150,11 +150,11 @@ async def quality_link(client, message):
             first_msg = await client.send_cached_media(chat_id=LOG_CHANNEL, file_id=fileid)
             third_id = str(first_msg.id)
         else:
-            return await message.reply("Wrong Input, Start Process Again By /quality")
+            return await message.reply("Wrong Input! Start Again By /quality")
     else:
-        return await message.reply("Choose Quality From Above Three Quality Only. Send /quality commamd again to start creating link.")
-        
-    third = await client.ask(message.from_user.id, "<b>Now Send Me Your **Another** Quality In Which You Upload File. Only Below These Qualities Are Available Only.\n\n1. If your file quality is less than or equal to 480p then send <code>480</code>\n2. If your file quality is greater than 480p and less than or equal to 720p then send <code>720</code>\n3. If your file quality is greater than 720p then send <code>1080</code>\n\nNote Don not use one quality 2 or more time.\n\nIf you want only 2 quality option then use <code>/getlink</code> command for stream link.</b>")
+        return await message.reply("Choose From 480, 720 or 1080 Only. Send /quality Again To Start.")
+
+    third = await client.ask(message.from_user.id, "<b>Send Me The Last Quality.\n\n1. 480p or below → send <code>480</code>\n2. Above 480p upto 720p → send <code>720</code>\n3. Above 720p → send <code>1080</code>\n\nNote: Don't Use Same Quality Twice.\n\nIf You Want Only 2 Quality Options Then Use <code>/getlink</code>.</b>")
     if third.text != second.text and third.text != first.text and third.text == "480":
         f_id = await client.ask(message.from_user.id, "Now Send Me Your 480p Quality File.")
         if f_id.video or f_id.document:
@@ -163,7 +163,7 @@ async def quality_link(client, message):
             first_msg = await client.send_cached_media(chat_id=LOG_CHANNEL, file_id=fileid)
             first_id = str(first_msg.id)
         else:
-            return await message.reply("Wrong Input, Start Process Again By /quality")
+            return await message.reply("Wrong Input! Start Again By /quality")
     elif third.text != second.text and third.text != first.text and third.text == "720":
         s_id = await client.ask(message.from_user.id, "Now Send Me Your 720p Quality File.")
         if s_id.video or s_id.document:
@@ -172,7 +172,7 @@ async def quality_link(client, message):
             first_msg = await client.send_cached_media(chat_id=LOG_CHANNEL, file_id=fileid)
             second_id = str(first_msg.id)
         else:
-            return await message.reply("Wrong Input, Start Process Again By /quality")
+            return await message.reply("Wrong Input! Start Again By /quality")
     elif third.text != second.text and third.text != first.text and third.text == "1080":
         t_id = await client.ask(message.from_user.id, "Now Send Me Your 1080p Quality File.")
         if t_id.video or t_id.document:
@@ -181,22 +181,22 @@ async def quality_link(client, message):
             first_msg = await client.send_cached_media(chat_id=LOG_CHANNEL, file_id=fileid)
             third_id = str(first_msg.id)
         else:
-            return await message.reply("Wrong Input, Start Process Again By /quality")
+            return await message.reply("Wrong Input! Start Again By /quality")
     elif third.text == "/getlink":
         params = {'u': message.from_user.id, 'w': first_id, 's': second_id, 't': third_id}
         url1 = f"{urlencode(params)}"
         link = await encode(url1)
         encoded_url = f"{LINK_URL}?Tech_VJ={link}"
-        rm=InlineKeyboardMarkup([[InlineKeyboardButton("🖇️ Open Link", url=encoded_url)]])
+        rm = InlineKeyboardMarkup([[InlineKeyboardButton("🖇️ Open Link", url=encoded_url)]])
         return await message.reply_text(text=f"<code>{encoded_url}</code>", reply_markup=rm)
     else:
-        return await message.reply("Choose Quality From Above Three Quality Only. Send /quality commamd again to start creating link.")
+        return await message.reply("Choose From 480, 720 or 1080 Only. Send /quality Again To Start.")
 
     params = {'u': message.from_user.id, 'w': first_id, 's': second_id, 't': third_id}
     url1 = f"{urlencode(params)}"
     link = await encode(url1)
     encoded_url = f"{LINK_URL}?Tech_VJ={link}"
-    rm=InlineKeyboardMarkup([[InlineKeyboardButton("🖇️ Open Link", url=encoded_url)]])
+    rm = InlineKeyboardMarkup([[InlineKeyboardButton("🖇️ Open Link", url=encoded_url)]])
     await message.reply_text(text=f"<code>{encoded_url}</code>", reply_markup=rm)
 
 @Client.on_message(filters.private & filters.text & ~filters.command(["account", "withdraw", "notify", "quality", "start", "update"]))
@@ -207,14 +207,14 @@ async def link_start(client, message):
     try:
         original = await decode(link_part)
     except:
-        return await message.reply("**Link Invalid**")
+        return await message.reply("**Invalid Link!**")
     try:
         u, user_id, id, sec, th = original.split("=")
     except:
-        return await message.reply("**Link Invalid**")
+        return await message.reply("**Invalid Link!**")
     user_id = user_id.replace("&w", "")
     if user_id == message.from_user.id:
-        rm=InlineKeyboardMarkup([[InlineKeyboardButton("🖇️ Open Link", url=message.text)]])
+        rm = InlineKeyboardMarkup([[InlineKeyboardButton("🖇️ Open Link", url=message.text)]])
         return await message.reply_text(text=f"<code>{message.text}</code>", reply_markup=rm)
     id = id.replace("&s", "")
     sec = sec.replace("&t", "")
@@ -222,58 +222,57 @@ async def link_start(client, message):
     url1 = f"{urlencode(params)}"
     link = await encode(url1)
     encoded_url = f"{LINK_URL}?Tech_VJ={link}"
-    rm=InlineKeyboardMarkup([[InlineKeyboardButton("🖇️ Open Link", url=encoded_url)]])
+    rm = InlineKeyboardMarkup([[InlineKeyboardButton("🖇️ Open Link", url=encoded_url)]])
     await message.reply_text(text=f"<code>{encoded_url}</code>", reply_markup=rm)
 
 @Client.on_message(filters.private & filters.command("account"))
 async def show_account(client, message):
     link_clicks = get_count(message.from_user.id)
     if link_clicks:
-        # Calculate balance using the reduced link clicks
-        balance = link_clicks / 1000.0  # Use floating-point division
-        formatted_balance = f"{balance:.2f}"  # Format to 2 decimal places
-        response = f"<b>Your Api Key :- <code>{message.from_user.id}</code>\n\nVideo Plays :- {link_clicks} ( Delay To Show Data )\n\nBalance :- ${formatted_balance}</b>"
+        balance = link_clicks / 1000.0
+        formatted_balance = f"{balance:.2f}"
+        response = f"<b>Your API Key :- <code>{message.from_user.id}</code>\n\nVideo Plays :- {link_clicks} (May Have Delay)\n\nBalance :- ${formatted_balance}</b>"
     else:
-        response = f"<b>Your Api Key :- <code>{message.from_user.id}</code>\nVideo Plays :- 0 ( Delay To Show Data )\nBalance :- $0</b>" 
+        response = f"<b>Your API Key :- <code>{message.from_user.id}</code>\nVideo Plays :- 0 (May Have Delay)\nBalance :- $0</b>"
     await message.reply(response)
 
 @Client.on_message(filters.private & filters.command("withdraw"))
 async def show_withdraw(client, message):
     w = get_withdraw(message.from_user.id)
     if w == True:
-        return await message.reply("One Withdrawal Is In Process Wait For Complete It")
+        return await message.reply("A Withdrawal Is Already In Process. Please Wait For It To Complete.")
     link_clicks = get_count(message.from_user.id)
     if not link_clicks:
-        return await message.reply("**You Are Not Eligible For Withdrawal.\nMinimum Withraw Is 1000 Link Clicks or Video Plays.**")
+        return await message.reply("**You Are Not Eligible For Withdrawal.\nMinimum 1000 Video Plays Required.**")
     if link_clicks >= 1000:
-        confirm = await client.ask(message.from_user.id, "You Are Going To Withdraw All Your Link Clicks. Are You Sure You Want To Withdraw ?\nSend /yes or /no")
+        confirm = await client.ask(message.from_user.id, "You Are About To Withdraw All Your Earnings. Are You Sure?\nSend /yes or /no")
         if confirm.text == "/no":
-            return await message.reply("**Withdraw Cancelled By You ❌**")
+            return await message.reply("**Withdrawal Cancelled ❌**")
         else:
-            pay = await client.ask(message.from_user.id, "Now Choose Your Payment Method, Click On In Which You Want Your Withdrawal.\n\n/upi - for upi, webmoney, airtm, capitalist\n\n/bank - for bank only")
+            pay = await client.ask(message.from_user.id, "Choose Your Payment Method:\n\n/upi - UPI, Webmoney, Airtm, Capitalist\n\n/bank - Bank Transfer Only")
             if pay.text == "/upi":
-                upi = await client.ask(message.from_user.id, "Now Send Me Your Upi Or Upi Number With Your Name, Make Sure Name Matches With Your Upi Account")
+                upi = await client.ask(message.from_user.id, "Send Your UPI ID Or UPI Number With Your Name. Make Sure Name Matches Your UPI Account.")
                 if not upi.text:
                     return await message.reply("**Wrong Input ❌**")
-                upi = f"Upi - {pay.text}"
+                upi = f"UPI - {pay.text}"
                 try:
                     upi.delete()
                 except:
                     pass
             else:
-                name = await client.ask(message.from_user.id, "Now Send Me Your Account Holder Full Name")
+                name = await client.ask(message.from_user.id, "Send Your Account Holder Full Name.")
                 if not name.text:
                     return await message.reply("**Wrong Input ❌**")
-                number = await client.ask(message.from_user.id, "Now Send Me Your Account Number")
+                number = await client.ask(message.from_user.id, "Send Your Account Number.")
                 if not int(number.text):
                     return await message.reply("**Wrong Input ❌**")
-                ifsc = await client.ask(message.from_user.id, "Now Send Me Your IFSC Code.")
+                ifsc = await client.ask(message.from_user.id, "Send Your IFSC Code.")
                 if not ifsc.text:
                     return await message.reply("**Wrong Input ❌**")
-                bank_name = await client.ask(message.from_user.id, "Now Send You Can Send Necessary Thing In One Message, Like Send Bank Name, Or Contact Details.")
+                bank_name = await client.ask(message.from_user.id, "Send Your Bank Name And Any Additional Contact Details.")
                 if not bank_name.text:
                     return await message.reply("**Wrong Input ❌**")
-                upi = f"Account Holder Name - {name.text}/n/nAccount Number - {number.text}/n/nIFSC Code - {ifsc.text}/n/nBank Name - {bank_name.text}\n\n"
+                upi = f"Account Holder Name - {name.text}\n\nAccount Number - {number.text}\n\nIFSC Code - {ifsc.text}\n\nBank Name - {bank_name.text}\n\n"
                 try:
                     name.delete()
                     number.delete()
@@ -281,37 +280,36 @@ async def show_withdraw(client, message):
                     bank_name.delete()
                 except:
                     pass
-            traffic = await client.ask(message.from_user.id, "Now Send Me Your Traffic Source Link, If Your Link Click Are Fake Then You Will Not Receive Payment And Withdrawal Get Cancelled")
+            traffic = await client.ask(message.from_user.id, "Send Your Traffic Source Link. If Clicks Are Fake, Payment Will Be Cancelled.")
             if not traffic.text:
-                return await message.reply("**Wrong Traffic Source ❌**")
-            balance = link_clicks / 1000.0  # Use floating-point division
-            formatted_balance = f"{balance:.2f}"  # Format to 2 decimal places
-            text = f"Api Key - {message.from_user.id}\n\n"
+                return await message.reply("**Invalid Traffic Source ❌**")
+            balance = link_clicks / 1000.0
+            formatted_balance = f"{balance:.2f}"
+            text = f"API Key - {message.from_user.id}\n\n"
             text += f"Video Plays - {link_clicks}\n\n"
-            text += f"Balance - ${formatted_balance}/n/n"
+            text += f"Balance - ${formatted_balance}\n\n"
             text += upi
             text += f"Traffic Link - {traffic.text}"
             await client.send_message(ADMIN, text)
             record_withdraw(message.from_user.id, True)
-            await message.reply(f"Your Withdrawal Balance - ${formatted_balance}/n/nNow Your Withdrawal Send To Owner, If Everything Fullfill The Criteria Then You Will Get Your Payment Within 3 Working Days.")
+            await message.reply(f"Your Withdrawal Balance - ${formatted_balance}\n\nWithdrawal Request Sent To Admin. If Everything Is Valid, Payment Will Be Made Within 3 Working Days.")
     else:
-        await message.reply("Your Video Plays Smaller Than 1000 Plays, Minimum Payout Is 1000 Video Plays or Link Clicks.")
-        
+        await message.reply("Your Video Plays Are Less Than 1000. Minimum Payout Is 1000 Video Plays.")
+
 @Client.on_message(filters.private & filters.command("notify") & filters.chat(ADMIN))
 async def show_notify(client, message):
     count = int(1)
-    user_id = await client.ask(message.from_user.id, "Now Send Me Api Key Of User")
+    user_id = await client.ask(message.from_user.id, "Send Me The API Key Of The User.")
     if int(user_id.text):
-        sub = await client.ask(message.from_user.id, "Payment Is Cancelled Or Send Successfully. /send or /cancel")
+        sub = await client.ask(message.from_user.id, "Payment Cancelled Or Sent Successfully? /send or /cancel")
         if sub.text == "/send":
-            record_visits(user_id.text, count)
+            record_visit(user_id.text, count)
             record_withdraw(user_id.text, False)
-            await client.send_message(user_id.text, "Your Withdrawal Is Successfully Completed And Sended To Your Bank Account.")
+            await client.send_message(user_id.text, "Your Withdrawal Has Been Completed Successfully And Sent To Your Account.")
         else:
-            reason = await client.ask(message.from_user.id, "Send Me The Reason For Cancellation Of Payment")
+            reason = await client.ask(message.from_user.id, "Send The Reason For Payment Cancellation.")
             if reason.text:
-                record_visits(user_id.text, count)
+                record_visit(user_id.text, count)
                 record_withdraw(user_id.text, False)
-                await client.send_message(user_id.text, f"Your Payment Cancelled - {reason.text}")
-    await message.reply("Successfully Message Send.")
-    
+                await client.send_message(user_id.text, f"Your Payment Was Cancelled - {reason.text}")
+    await message.reply("Message Sent Successfully ✅")
