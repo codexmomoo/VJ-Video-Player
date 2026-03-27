@@ -1,7 +1,3 @@
-# Don't Remove Credit @VJ_Botz
-# Subscribe YouTube Channel For Amazing Bot @Tech_VJ
-# Ask Doubt on telegram @KingVJ01
-
 import re, math, logging, secrets, mimetypes, time
 from info import *
 from aiohttp import web
@@ -25,70 +21,73 @@ html_content = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to VJ Disk</title>
+    <meta name="theme-color" content="#08080e">
+    <title>CodeX OTT — Stream Server</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <style>
+        *{margin:0;padding:0;box-sizing:border-box}
         body {
-            margin: 0;
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #ff7e5f, #feb47b);
-            color: #fff;
+            background: #08080e;
+            color: #e8e8f0;
+            font-family: 'Rajdhani', sans-serif;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            text-align: center;
-            perspective: 1000px;
+            overflow: hidden;
+            gap: 20px;
         }
-        
-        .container {
-            transform-style: preserve-3d;
-            animation: rotate 10s infinite linear;
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(229,9,20,0.1), transparent 70%);
+            pointer-events: none;
         }
-
-        @keyframes rotate {
-            from {
-                transform: rotateY(0deg);
-            }
-            to {
-                transform: rotateY(360deg);
-            }
+        .logo {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 48px;
+            letter-spacing: 10px;
+            color: #fff;
+            text-shadow: 0 0 40px rgba(229,9,20,0.5);
+            position: relative;
+            z-index: 1;
         }
-
-        h1 {
-            font-size: 4em;
-            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+        .logo span { color: #e50914; }
+        .line {
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #e50914, #f5c518, transparent);
+            position: relative;
+            z-index: 1;
         }
-
-        p {
-            font-size: 1.5em;
-            margin-top: 20px;
-            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+        .status {
+            font-size: 13px;
+            letter-spacing: 4px;
+            color: #7777aa;
+            position: relative;
+            z-index: 1;
         }
-
-        .button {
-            margin-top: 30px;
-            padding: 15px 30px;
-            font-size: 1.2em;
-            background-color: #4CAF50; /* Green */
-            border: none;
-            border-radius: 5px;
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
+        .status span {
+            color: #22c55e;
+            font-weight: 700;
         }
-
-        .button:hover {
-            background-color: #45a049; /* Darker green */
+        .powered {
+            position: fixed;
+            bottom: 20px;
+            font-size: 10px;
+            letter-spacing: 3px;
+            color: rgba(255,255,255,0.15);
         }
+        .powered span { color: rgba(229,9,20,0.4); }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome To VJ Disk!</h1>
-        <p>Your ultimate destination for streaming and sharing videos!</p>
-        <p>Explore a world of entertainment at your fingertips.</p>
-        <button class="button" onclick="alert('Explore Now!')">Get Started</button>
-    </div>
+    <div class="logo"><span>CODE</span>X OTT</div>
+    <div class="line"></div>
+    <div class="status">STREAM SERVER <span>ONLINE</span></div>
+    <div class="powered">POWERED BY <span>CODEXMOMO</span></div>
 </body>
 </html>
 """
@@ -116,8 +115,8 @@ async def stream_handler(request: web.Request):
 @routes.post('/click-counter')
 async def handle_click(request):
     try:
-        data = await request.json()  # Get the JSON body
-        user_id = int(data.get('user_id'))  # Extract user_id from the request
+        data = await request.json()
+        user_id = int(data.get('user_id'))
         today = datetime.now().strftime('%Y-%m-%d')
 
         user_agent = request.headers.get('User-Agent')
@@ -150,7 +149,7 @@ async def get_original(request: web.Request):
     original = await decode(short_link)
     if original:
         link = f"{STREAM_URL}link?{original}"
-        raise web.HTTPFound(link)  # Redirect to the constructed link 
+        raise web.HTTPFound(link)
     else:
         return web.Response(text=html_content, content_type='text/html')
 
@@ -165,7 +164,7 @@ async def visits(request: web.Request):
     sec_id = await encode(second)
     th_id = await encode(third)
     link = f"{STREAM_URL}{data}/{user_id}/{sec_id}/{th_id}"
-    raise web.HTTPFound(link)  # Redirect to the constructed link
+    raise web.HTTPFound(link)
 
 @routes.get(r"/dl/{path:\S+}", allow_head=True)
 async def stream_handler(request: web.Request):
