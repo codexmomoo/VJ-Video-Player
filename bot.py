@@ -1,7 +1,7 @@
-import sys, glob, importlib, logging, logging.config, pytz, asyncio
+import sys, glob, importlib, logging, logging.config, pytz, asyncio, os
 from pathlib import Path
 
-# Get logging configurations
+# Logging
 logging.config.fileConfig('logging.conf')
 logging.getLogger().setLevel(logging.INFO)
 logging.getLogger("pyrogram").setLevel(logging.ERROR)
@@ -13,11 +13,10 @@ logging.basicConfig(
 logging.getLogger("aiohttp").setLevel(logging.ERROR)
 logging.getLogger("aiohttp.web").setLevel(logging.ERROR)
 
-from pyrogram import Client, idle 
+from pyrogram import idle
 from info import *
-from typing import Union, Optional, AsyncGenerator
-from Script import script 
-from datetime import date, datetime 
+from Script import script
+from datetime import date, datetime
 from aiohttp import web
 from plugins import web_server
 
@@ -27,39 +26,56 @@ from TechVJ.bot.clients import initialize_clients
 
 ppath = "plugins/*.py"
 files = glob.glob(ppath)
+
+# START BOTS
 TechVJBot.start()
 TechVJBackUpBot.start()
+
 loop = asyncio.get_event_loop()
 
 
 async def start():
-    print('\n')
-    print('Starting CodeX OTT Stream Bot — by @CODEXMOMO')
-    bot_info = await TechVJBot.get_me()
+    print('\n🚀 Starting CodeX OTT Stream Bot...\n')
+
     await initialize_clients()
+
+    # Load plugins
     for name in files:
-        with open(name) as a:
-            patt = Path(a.name)
-            plugin_name = patt.stem.replace(".py", "")
-            plugins_dir = Path(f"plugins/{plugin_name}.py")
-            import_path = "plugins.{}".format(plugin_name)
-            spec = importlib.util.spec_from_file_location(import_path, plugins_dir)
-            load = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(load)
-            sys.modules["plugins." + plugin_name] = load
-            print("CodeX OTT Loaded => " + plugin_name)
+        patt = Path(name)
+        plugin_name = patt.stem
+        import_path = f"plugins.{plugin_name}"
+        spec = importlib.util.spec_from_file_location(import_path, name)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        sys.modules[import_path] = module
+        print("✅ Loaded Plugin =>", plugin_name)
+
+    # Ping (optional)
     if ON_HEROKU:
         asyncio.create_task(ping_server())
-    me = await TechVJBot.get_me()
+
+    # Restart log message
     tz = pytz.timezone('Asia/Kolkata')
     today = date.today()
     now = datetime.now(tz)
     time = now.strftime("%H:%M:%S %p")
-    await TechVJBot.send_message(chat_id=LOG_CHANNEL, text=script.RESTART_TXT.format(today, time))
+
+    await TechVJBot.send_message(
+        chat_id=LOG_CHANNEL,
+        text=script.RESTART_TXT.format(today, time)
+    )
+
+    # 🌐 WEB SERVER START (FINAL FIX)
     app = web.AppRunner(await web_server())
     await app.setup()
+
     bind_address = "0.0.0.0"
-    await web.TCPSite(app, bind_address, PORT).start()
+    port = int(os.environ.get("PORT", 8080))  # ✅ Render FIX
+
+    await web.TCPSite(app, bind_address, port).start()
+    print(f"🌐 Server running on port {port}")
+
+    # KEEP RUNNING
     await idle()
 
 
@@ -67,4 +83,4 @@ if __name__ == '__main__':
     try:
         loop.run_until_complete(start())
     except KeyboardInterrupt:
-        logging.info('CodeX OTT Stream Bot Stopped. Bye 👋')
+        logging.info('❌ Bot Stopped')
