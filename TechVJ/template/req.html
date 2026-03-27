@@ -2,186 +2,320 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="shortcut icon" href="https://i.ibb.co/qJyZWCv/20230629-081948-0000.png" type="image/x-icon">
-    <meta property="og:image" content="https://i.ibb.co/qJyZWCv/20230629-081948-0000.png" itemprop="thumbnailUrl">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{file_name}} | {{name}}</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.js"></script>    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <meta name="theme-color" content="#08080e">
+    <meta property="og:title" content="{{file_name}} | CodeX OTT">
+    <meta property="og:image" content="https://i.ibb.co/qJyZWCv/20230629-081948-0000.png">
+    <title>{{file_name}} | CodeX OTT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.6.9/plyr.css"/>
+    <style>
+    *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    body{
+        background:#08080e;
+        color:#e8e8f0;
+        font-family:'Exo 2',sans-serif;
+        min-height:100vh;
+        display:flex;flex-direction:column;
+    }
+    body::before{
+        content:'';position:fixed;inset:0;
+        background:radial-gradient(ellipse 80% 40% at 50% 0%,rgba(229,9,20,0.07),transparent 60%);
+        pointer-events:none;z-index:0;
+    }
+
+    /* NAV */
+    nav{
+        position:sticky;top:0;z-index:100;
+        background:rgba(8,8,14,0.95);
+        backdrop-filter:blur(20px);
+        border-bottom:1px solid rgba(255,255,255,0.07);
+        padding:0 16px;height:56px;
+        display:flex;align-items:center;justify-content:space-between;
+    }
+    .nav-brand{
+        font-family:'Bebas Neue',cursive;
+        font-size:20px;letter-spacing:4px;
+        color:#fff;text-decoration:none;
+    }
+    .nav-brand span{color:#e50914}
+    .nav-right{display:flex;align-items:center;gap:8px}
+    .tg-btn{
+        display:flex;align-items:center;gap:6px;
+        padding:6px 12px;
+        background:rgba(36,161,222,0.12);
+        border:1px solid rgba(36,161,222,0.25);
+        border-radius:8px;
+        text-decoration:none;
+        font-family:'Rajdhani',sans-serif;
+        font-size:12px;font-weight:700;letter-spacing:1px;
+        color:#24a1de;transition:all 0.2s;
+    }
+    .tg-btn:active{transform:scale(0.96)}
+
+    /* MAIN */
+    main{
+        flex:1;position:relative;z-index:1;
+        display:flex;flex-direction:column;
+    }
+
+    /* FILE TITLE */
+    .file-title-wrap{
+        padding:16px 16px 12px;
+        text-align:center;
+        border-bottom:1px solid rgba(255,255,255,0.05);
+    }
+    .file-title{
+        font-family:'Rajdhani',sans-serif;
+        font-size:14px;font-weight:700;
+        color:#fff;
+        display:-webkit-box;
+        -webkit-line-clamp:2;
+        -webkit-box-orient:vertical;
+        overflow:hidden;
+        line-height:1.5;
+    }
+
+    /* PLAYER WRAP */
+    .player-wrap{
+        width:100%;
+        background:#000;
+        position:relative;
+    }
+    .player-wrap video{width:100%;display:block}
+
+    /* Plyr custom theme */
+    .plyr--video .plyr__control--overlaid{
+        background:rgba(229,9,20,0.85)!important;
+    }
+    .plyr--video .plyr__control--overlaid:hover{
+        background:#e50914!important;
+    }
+    .plyr__control:hover{background:rgba(229,9,20,0.2)!important}
+    .plyr--full-ui input[type=range]{color:#e50914!important}
+    .plyr__menu__container .plyr__control[role=menuitemradio][aria-checked=true]::before{background:#e50914!important}
+
+    /* CONTENT BELOW PLAYER */
+    .content{
+        padding:16px;
+        display:flex;flex-direction:column;gap:12px;
+        max-width:760px;margin:0 auto;width:100%;
+    }
+
+    /* QUALITY BADGE ROW */
+    .quality-row{
+        display:flex;gap:8px;flex-wrap:wrap;
+    }
+    .q-badge{
+        font-family:'Rajdhani',sans-serif;
+        font-size:11px;font-weight:700;letter-spacing:1px;
+        padding:4px 12px;border-radius:20px;
+        border:1px solid;
+    }
+    .q-480{color:#38d38b;border-color:rgba(56,211,139,0.3);background:rgba(56,211,139,0.07)}
+    .q-720{color:#58a6ff;border-color:rgba(88,166,255,0.3);background:rgba(88,166,255,0.07)}
+    .q-1080{color:#f5c518;border-color:rgba(245,197,24,0.3);background:rgba(245,197,24,0.07)}
+
+    /* NOTICE CARDS */
+    .notice{
+        display:flex;align-items:flex-start;gap:10px;
+        padding:13px 14px;
+        border-radius:12px;
+        border:1px solid;
+    }
+    .notice-warn{
+        background:rgba(229,9,20,0.06);
+        border-color:rgba(229,9,20,0.2);
+    }
+    .notice-info{
+        background:rgba(245,197,24,0.05);
+        border-color:rgba(245,197,24,0.15);
+    }
+    .notice svg{flex-shrink:0;margin-top:1px}
+    .notice-txt{
+        font-family:'Exo 2',sans-serif;
+        font-size:11px;line-height:1.7;
+        color:rgba(232,232,240,0.5);
+    }
+    .notice-txt b{color:rgba(232,232,240,0.8)}
+
+    /* TG CHANNEL CARD */
+    .tg-card{
+        display:flex;align-items:center;gap:12px;
+        padding:14px 15px;
+        background:#111118;
+        border:1px solid rgba(36,161,222,0.2);
+        border-radius:14px;
+        text-decoration:none;
+        transition:all 0.2s;
+    }
+    .tg-card:active{transform:scale(0.97)}
+    .tg-card-ico{
+        width:40px;height:40px;
+        background:rgba(36,161,222,0.12);
+        border-radius:10px;
+        display:flex;align-items:center;justify-content:center;
+        flex-shrink:0;
+    }
+    .tg-card-info{flex:1}
+    .tg-card-title{
+        font-family:'Rajdhani',sans-serif;
+        font-size:14px;font-weight:700;color:#fff;
+        margin-bottom:2px;
+    }
+    .tg-card-sub{
+        font-family:'Exo 2',sans-serif;
+        font-size:11px;color:#7777aa;
+    }
+    .tg-card-arr{color:#24a1de;font-size:20px;font-family:'Bebas Neue',cursive}
+
+    /* FOOTER */
+    footer{
+        position:relative;z-index:1;
+        border-top:1px solid rgba(255,255,255,0.05);
+        padding:14px;text-align:center;
+        margin-top:auto;
+    }
+    .footer-brand{
+        font-family:'Bebas Neue',cursive;
+        font-size:11px;letter-spacing:4px;
+        color:rgba(255,255,255,0.12);
+    }
+    .footer-brand span{color:rgba(229,9,20,0.35)}
+    .footer-copy{
+        font-family:'Exo 2',sans-serif;
+        font-size:10px;color:rgba(255,255,255,0.08);
+        margin-top:4px;letter-spacing:1px;
+    }
+    </style>
+
     <script>
-        var userId = "{{user_id}}";
-	var hasSpent30Seconds = false;
-        var clickCounted = false;
+    // Click counter — unchanged logic
+    var userId = "{{user_id}}";
+    var hasSpent30Seconds = false;
+    var clickCounted = false;
 
-        function setSpentTimeFlag() {
-            hasSpent30Seconds = true;
+    function setSpentTimeFlag(){ hasSpent30Seconds = true; }
+    setTimeout(setSpentTimeFlag, 30000);
+
+    document.addEventListener("click", function(event){
+        if(hasSpent30Seconds && !clickCounted){
+            clickCounted = true;
+            fetch('/click-counter',{
+                method:'POST',
+                headers:{'Content-Type':'application/json'},
+                body: JSON.stringify({user_id: userId})
+            })
+            .then(r=>r.json())
+            .catch(e=>console.error('Error:',e));
         }
-
-        setTimeout(setSpentTimeFlag, 30000); // 30000 milliseconds = 30 seconds
-
-        document.addEventListener("click", function(event) {
-            if (hasSpent30Seconds && !clickCounted) {
-                clickCounted = true;
-                fetch('/click-counter', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ user_id: userId })  // Send user_id in the request body
-                })
-                .then(response => response.json())
-                .catch(error => console.error('Error:', error));
-            }
-        });
+    });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-    <link rel="stylesheet" type='text/css' href="https://drive----google.com/uc?export=view&id=1pVLG4gZy7jdow3sO-wFS06aP_A9QX0O6">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Delius">
-    <link rel="stylesheet" href="https://cdn.plyr.io/3.6.9/plyr.css" />
-    <script src="https://cdn.tailwindcss.com"></script>
 </head>
+<body>
 
-<body class="bg-black">
-    <header>
-        <!-- Navbar -->
-            <nav class="navbar bg-dark p-lg-4 p-2">
-               <div class="d-flex ">
-                <!-- web title -->
-                <div class="container-fluid">
-                    <a class="navbar-brand  text-light fw-bold " href="{{link}}">
-                        <span class="bg-clip-text sm:text-[25px] text-[22px] text-transparent bg-gradient-to-r from-pink-500 to-violet-500">
-                            {{name}}
-                          </span>
-                    </a>
-                  </div>
-               </div>
-            </nav>
-            <!-- ./Navbar -->
-    </header>
-    <div class="bg-black  text-light"  >
-        <!-- file Name -> to be displayed here  -->
-	<div class="justify-content-center align-items-center w-100 d-flex">
-            <div id="file-name" class="tex-center text-lg max:w-74  p-2 flex-wrap text-center justify-center items-center">
-                <p class="fw-bold"> 
-                    <span id="myDiv" class="h6 flex-wrap text-center font-bold justify-center items-center card-title wow animate__animated animate__fadeInRight" >
-                        {{file_name}}
-                    </span>
-                </p>
-            </div>
-	</div>
-        <!-- Online Video Player -> to be displayed here  -->
-        <div class="justify-content-center align-items-center w-100 d-flex  flex-wrap">
-            <div class="lg:w-9/12 lg:px-12 lg:py-4 w-full  border border-danger wow animate__animated animate__fadeInLeft">
-                <video id="player" class="player" playsinline controls>
-                    {% if file_url %}
-                    <source src="{{file_url}}" type="video/mp4" size="480">
-                    {% endif %}
-                    {% if file_url_two %}
-                    <source src="{{file_url_two}}" type="video/mp4" size="720">
-                    {% endif %}
-                    {% if file_url_three %}
-                    <source src="{{file_url_three}}" type="video/mp4" size="1080">
-                    {% endif %}			
-                </video>		    
-            </div>
-		<a href="{{link}}" target="_blank" class="bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded mt-4">
-                    Join Telegram Channel
-                </a>
-        </div>
+<nav>
+    <a class="nav-brand" href="{{link}}"><span>CODE</span>X OTT</a>
+    <div class="nav-right">
+        <a class="tg-btn" href="{{link}}" target="_blank">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            JOIN
+        </a>
+    </div>
+</nav>
 
-            <div class="justify-content-center align-items-center w-100 d-flex mb-3 mt-4">
-                <div class="row d-flex w-100 justify-content-center align-items-center">
-                    <div class="col-lg-8 col-10  py-2 text-center bg-danger rounded-4 text-sm font-bold wow animate__animated animate__FadeIn">
-                            Video Not Playing ? Possibly Because Your Browser Doesn't Support Codec Please Open Link In Another Browser.
-                    </div>
-                </div>
-            </div>
-
-	    <div class="justify-content-center align-items-center w-100 d-flex mb-3">
-                <div class="row d-flex w-100 justify-content-center align-items-center">
-                    <div class="col-lg-8 col-10  py-2 text-center bg-danger rounded-4 text-sm font-bold wow animate__animated animate__FadeIn">
-                            ⚠️ Disclaimer :- The content available on This Website is for informational and entertainment purposes only. We do not host any videos; all media is sourced from third-party platforms, and we are not responsible for their content or availability. By using our website, you acknowledge that you do so at your own risk, and we encourage you to verify the legality of any content in your jurisdiction.
-                    </div>
-                </div>
-	    </div>
-	    
+<main>
+    <!-- File Title -->
+    <div class="file-title-wrap">
+        <div class="file-title" id="fileTitle">{{file_name}}</div>
     </div>
 
-        <footer class="bg-dark justify-content-around align-items-center">
-        <div class="text-center text-xs p-3 dark:text-light text-light gap-2" style="background-color: rgba(0, 0, 0, 0.2);">
-            ©  <script type="text/JavaScript">
-                var theDate=new Date() 
-                    document.write(theDate.getFullYear()) 
-            </script> Copyright :
-                <a class="bg-clip-text text-[16px] text-transparent bg-gradient-to-r from-pink-500 to-violet-500 font-bold tracking-wide px-1" href="{{link}}">{{name}}</a>             
-                All Right Reserved
-            </div>   
-        </footer>
+    <!-- VIDEO PLAYER -->
+    <div class="player-wrap">
+        <video id="player" class="player" playsinline controls>
+            {% if file_url %}
+            <source src="{{file_url}}" type="video/mp4" size="480">
+            {% endif %}
+            {% if file_url_two %}
+            <source src="{{file_url_two}}" type="video/mp4" size="720">
+            {% endif %}
+            {% if file_url_three %}
+            <source src="{{file_url_three}}" type="video/mp4" size="1080">
+            {% endif %}
+        </video>
+    </div>
 
-    <script src="js/wow.min.js"></script>
-    <script>
-        new WOW().init();
-    </script>
-    <script>
-        var div = document.getElementById('myDiv');
-        var text = div.textContent;
+    <!-- CONTENT -->
+    <div class="content">
 
-        if(text.length > 60){
-            div.textContent = text.slice(0, 60);
-        }
+        <!-- Quality badges -->
+        <div class="quality-row">
+            {% if file_url %}<span class="q-badge q-480">480p</span>{% endif %}
+            {% if file_url_two %}<span class="q-badge q-720">720p</span>{% endif %}
+            {% if file_url_three %}<span class="q-badge q-1080">1080p</span>{% endif %}
+        </div>
 
-    </script>
-    
-    <script src="https://cdn.plyr.io/3.6.9/plyr.js"></script>
-    <script>
-        const controls = [
-            'play-large',
-            'rewind',
-            'play',
-            'fast-forward',
-            'progress',
-            'current-time',
-            'duration',
-            'mute',
-            'volume',
-            'captions',
-            'settings',
-            'pip',
-            'airplay',     
-            'fullscreen'
-        ];
+        <!-- Video not playing notice -->
+        <div class="notice notice-warn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#e50914" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <div class="notice-txt"><b>Video not playing?</b> Your browser may not support this codec. Try opening the link in a different browser like Chrome or Firefox.</div>
+        </div>
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const player = Plyr.setup('.player', {
-                controls
-            });
-        });
-    </script>
-    <!-- disabling right click -->
-    <script>
-        document.addEventListener("contextmenu", function (e) {
+        <!-- Telegram channel card -->
+        <a class="tg-card" href="{{link}}" target="_blank">
+            <div class="tg-card-ico">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#24a1de" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </div>
+            <div class="tg-card-info">
+                <div class="tg-card-title">{{name}}</div>
+                <div class="tg-card-sub">Join our Telegram channel for more content</div>
+            </div>
+            <div class="tg-card-arr">›</div>
+        </a>
+
+        <!-- Disclaimer -->
+        <div class="notice notice-info">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f5c518" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <div class="notice-txt"><b>Disclaimer:</b> Content on CodeX OTT is for informational and entertainment purposes only. We do not host any videos — all media is streamed via Telegram. We are not responsible for content availability. Use at your own risk.</div>
+        </div>
+
+    </div>
+</main>
+
+<footer>
+    <div class="footer-brand">POWERED BY <span>CODEXMOMO</span> &nbsp;·&nbsp; FAN MADE</div>
+    <div class="footer-copy">© <span id="yr"></span> CodeX OTT — All Rights Reserved</div>
+</footer>
+
+<script src="https://cdn.plyr.io/3.6.9/plyr.js"></script>
+<script>
+// Year
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+// Plyr setup
+const controls = [
+    'play-large','rewind','play','fast-forward',
+    'progress','current-time','duration',
+    'mute','volume','captions',
+    'settings','pip','airplay','fullscreen'
+];
+document.addEventListener('DOMContentLoaded', ()=>{
+    Plyr.setup('.player', { controls });
+});
+
+// Trim title
+const ft = document.getElementById('fileTitle');
+if(ft && ft.textContent.length > 80){
+    ft.textContent = ft.textContent.slice(0,80)+'...';
+}
+
+// Disable right click & devtools
+document.addEventListener("contextmenu", e=>e.preventDefault());
+document.addEventListener('keydown', function(e){
+    if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&e.key==='I')||(e.ctrlKey&&e.key==='u')){
         e.preventDefault();
-    });
-    document.addEventListener('keydown', function (e) {
-        if (
-            e.key === 'F12' ||
-            (e.ctrlKey && e.shiftKey && e.key === 'I') ||
-            (e.ctrlKey && e.key === 'u') ||
-            e.ctrlKey ||
-            e.shiftKey ||
-            e.altKey
-        ) {
-            e.preventDefault();
-        }
-    });
-    </script>
-    
+    }
+});
+</script>
 </body>
 </html>
-
-<!--  Don't Remove Credit @VJ_Bot Subscribe YouTube Channel For Amazing Bot @Tech_VJ Ask Doubt on telegram @KingVJ01 -->
