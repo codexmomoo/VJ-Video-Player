@@ -1,7 +1,3 @@
-# Don't Remove Credit @VJ_Botz
-# Subscribe YouTube Channel For Amazing Bot @Tech_VJ
-# Ask Doubt on telegram @KingVJ01
-
 import sys, glob, importlib, logging, logging.config, pytz, asyncio
 from pathlib import Path
 
@@ -38,7 +34,7 @@ loop = asyncio.get_event_loop()
 
 async def start():
     print('\n')
-    print('Initalizing Your Bot')
+    print('Starting CodeX OTT Stream Bot — by @CODEXMOMO')
     bot_info = await TechVJBot.get_me()
     await initialize_clients()
     for name in files:
@@ -51,7 +47,7 @@ async def start():
             load = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(load)
             sys.modules["plugins." + plugin_name] = load
-            print("Tech VJ Imported => " + plugin_name)
+            print("CodeX OTT Loaded => " + plugin_name)
     if ON_HEROKU:
         asyncio.create_task(ping_server())
     me = await TechVJBot.get_me()
@@ -71,5 +67,4 @@ if __name__ == '__main__':
     try:
         loop.run_until_complete(start())
     except KeyboardInterrupt:
-        logging.info('Service Stopped Bye 👋')
-
+        logging.info('CodeX OTT Stream Bot Stopped. Bye 👋')
