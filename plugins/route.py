@@ -146,12 +146,8 @@ async def handle_click(request):
 @routes.get('/{short_link}', allow_head=True)
 async def get_original(request: web.Request):
     short_link = request.match_info["short_link"]
-    original = await decode(short_link)
-    if original:
-        link = f"{STREAM_URL}link?{original}"
-        raise web.HTTPFound(link)
-    else:
-        return web.Response(text=html_content, content_type='text/html')
+    link = f"{STREAM_URL}link?{short_link}"
+    raise web.HTTPFound(link)
 
 @routes.get('/link', allow_head=True)
 async def visits(request: web.Request):
