@@ -187,6 +187,56 @@
         font-size:10px;color:rgba(255,255,255,0.08);
         margin-top:4px;letter-spacing:1px;
     }
+
+    /* HELP DIALOG */
+    .dialog-ov{position:fixed;inset:0;background:rgba(0,0,0,0.88);backdrop-filter:blur(10px);z-index:999;display:none;align-items:flex-end;justify-content:center}
+    .dialog-ov.open{display:flex}
+    .dialog-box{background:#111118;border:1px solid rgba(255,255,255,0.07);border-radius:20px 20px 0 0;width:100%;max-width:500px;padding:0 0 40px;animation:slideUp 0.35s cubic-bezier(0.16,1,0.3,1)}
+    @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+    .dialog-handle{width:40px;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;margin:14px auto 0}
+    .dialog-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 20px 12px;border-bottom:1px solid rgba(255,255,255,0.06)}
+    .dialog-title{font-family:'Bebas Neue',cursive;font-size:17px;letter-spacing:4px;color:#fff}
+    .dialog-close{width:30px;height:30px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;color:#7777aa}
+    .dialog-body{padding:16px 20px}
+    .help-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+    .help-item:last-child{border-bottom:none}
+    .help-ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .help-info{display:flex;flex-direction:column;gap:3px}
+    .help-name{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#fff}
+    .help-desc{font-family:'Exo 2',sans-serif;font-size:11px;color:#7777aa;line-height:1.6}
+    .help-timer{display:inline-flex;align-items:center;gap:5px;margin-top:5px;padding:3px 10px;background:rgba(245,197,24,0.08);border:1px solid rgba(245,197,24,0.2);border-radius:20px;font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;color:#f5c518}
+
+    /* MINI PLAYER */
+    .player-wrap{transition:all 0.3s ease}
+    .player-wrap.mini{position:fixed;bottom:80px;right:16px;width:200px;height:113px;z-index:500;border-radius:12px;overflow:hidden;border:2px solid rgba(229,9,20,0.5);box-shadow:0 8px 32px rgba(0,0,0,0.8)}
+    .mini-close{position:absolute;top:4px;right:4px;width:22px;height:22px;background:rgba(0,0,0,0.8);border-radius:50%;display:none;align-items:center;justify-content:center;cursor:pointer;z-index:501;font-size:11px;color:#fff}
+    .player-wrap.mini .mini-close{display:flex}
+
+    /* SPEED CONTROLLER */
+    .speed-wrap{display:flex;align-items:center;gap:8px;padding:10px 16px;background:#111118;border:1px solid rgba(255,255,255,0.06);border-radius:12px}
+    .speed-label{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;color:#7777aa;white-space:nowrap}
+    .speed-btns{display:flex;gap:6px;flex-wrap:wrap}
+    .speed-btn{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;padding:5px 10px;border-radius:8px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);color:#7777aa;cursor:pointer;transition:all 0.2s}
+    .speed-btn.active{background:rgba(229,9,20,0.15);border-color:rgba(229,9,20,0.4);color:#e50914}
+
+    /* INFO SECTION */
+    .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .info-cell{background:#111118;border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:12px 14px}
+    .info-cell-label{font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:#7777aa;margin-bottom:5px}
+    .info-cell-val{font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:2px;color:#fff}
+    .info-cell-sub{font-family:'Exo 2',sans-serif;font-size:10px;color:#7777aa;margin-top:2px}
+
+    /* SCREENSHOT BLOCK */
+    .ss-overlay{position:fixed;inset:0;background:#000;z-index:9999;display:none;align-items:center;justify-content:center;flex-direction:column;gap:16px}
+    .ss-overlay.show{display:flex}
+    .ss-title{font-family:'Bebas Neue',cursive;font-size:24px;letter-spacing:6px;color:#e50914}
+    .ss-msg{font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:2px;color:#7777aa;text-align:center;line-height:1.8;padding:0 30px}
+
+    /* PROGRESS SAVE */
+    .resume-bar{display:none;align-items:center;gap:10px;padding:10px 14px;background:rgba(245,197,24,0.08);border:1px solid rgba(245,197,24,0.2);border-radius:12px;cursor:pointer}
+    .resume-bar.show{display:flex}
+    .resume-txt{font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;color:#f5c518;letter-spacing:1px}
+    .resume-sub{font-family:'Exo 2',sans-serif;font-size:10px;color:#7777aa}
     </style>
 
     <script>
@@ -231,7 +281,8 @@
     </div>
 
     <!-- VIDEO PLAYER -->
-    <div class="player-wrap">
+    <div class="player-wrap" id="playerWrap">
+    <div class="mini-close" onclick="closeMini()">✕</div>
         <video id="player" class="player" playsinline controls>
             {% if file_url %}
             <source src="{{file_url}}" type="video/mp4" size="480">
@@ -255,10 +306,11 @@
             {% if file_url_three %}<span class="q-badge q-1080">1080p</span>{% endif %}
         </div>
 
-        <!-- Video not playing notice -->
-        <div class="notice notice-warn">
+        <!-- Still not playing button -->
+        <div class="notice notice-warn" onclick="openHelpDialog()" style="cursor:pointer">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#e50914" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            <div class="notice-txt"><b>Video not playing?</b> Your browser may not support this codec. Try opening the link in a different browser like Chrome or Firefox.</div>
+            <div class="notice-txt" style="flex:1"><b>Still not playing?</b> Tap here to know why</div>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#e50914" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
         </div>
 
         <!-- Telegram channel card -->
@@ -314,6 +366,166 @@ document.addEventListener("contextmenu", e=>e.preventDefault());
 document.addEventListener('keydown', function(e){
     if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&e.key==='I')||(e.ctrlKey&&e.key==='u')){
         e.preventDefault();
+    }
+});
+</script>
+
+<!-- HELP DIALOG -->
+<div class="dialog-ov" id="helpDialog" onclick="if(event.target===this)closeHelpDialog()">
+  <div class="dialog-box">
+    <div class="dialog-handle"></div>
+    <div class="dialog-hdr">
+      <div class="dialog-title">VIDEO NOT PLAYING?</div>
+      <div class="dialog-close" onclick="closeHelpDialog()">✕</div>
+    </div>
+    <div class="dialog-body">
+      <div class="help-item">
+        <div class="help-ico" style="background:rgba(229,9,20,0.12)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#e50914" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div class="help-info">
+          <div class="help-name">Large File — Please Wait</div>
+          <div class="help-desc">Agar file size badi hai toh server ko buffer karne mein time lagta hai. Player automatically start ho jaayega.</div>
+          <div class="help-timer">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            5 — 7 minutes wait karo
+          </div>
+        </div>
+      </div>
+      <div class="help-item">
+        <div class="help-ico" style="background:rgba(245,197,24,0.1)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f5c518" stroke-width="2" stroke-linecap="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="#f5c518"/></svg>
+        </div>
+        <div class="help-info">
+          <div class="help-name">Slow / Weak Network</div>
+          <div class="help-desc">WiFi ya strong 4G use karo. Slow network pe video buffer hone mein zyada time lagta hai.</div>
+        </div>
+      </div>
+      <div class="help-item">
+        <div class="help-ico" style="background:rgba(88,166,255,0.1)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#58a6ff" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <div class="help-info">
+          <div class="help-name">Browser Not Supported</div>
+          <div class="help-desc">Chrome ya Firefox mein open karo. Kuch browsers is codec ko support nahi karte.</div>
+        </div>
+      </div>
+      <div class="help-item">
+        <div class="help-ico" style="background:rgba(229,9,20,0.1)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#e50914" stroke-width="2" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <div class="help-info">
+          <div class="help-name">Server Busy / Render Free Tier</div>
+          <div class="help-desc">Free server pe load zyada hone pe thodi delay ho sakti hai. 1-2 minute baad page refresh karo.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function openHelpDialog(){ document.getElementById('helpDialog').classList.add('open'); }
+function closeHelpDialog(){ document.getElementById('helpDialog').classList.remove('open'); }
+</script>
+
+<!-- SCREENSHOT BLOCK OVERLAY -->
+<div class="ss-overlay" id="ssOverlay">
+    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#e50914" stroke-width="1.5" stroke-linecap="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/><line x1="2" y1="2" x2="22" y2="22" stroke="#e50914"/></svg>
+    <div class="ss-title">SCREENSHOT BLOCKED</div>
+    <div class="ss-msg">Screenshots are not allowed on CodeX OTT to protect content creators. Thank you for understanding.</div>
+</div>
+
+<script>
+// ── MINI PLAYER ──
+let isMini = false;
+const playerWrap = document.getElementById('playerWrap');
+
+window.addEventListener('scroll', ()=>{
+    const rect = playerWrap.getBoundingClientRect();
+    if(rect.bottom < 0 && !isMini){
+        playerWrap.classList.add('mini');
+        isMini = true;
+    } else if(rect.bottom > 0 && isMini){
+        playerWrap.classList.remove('mini');
+        isMini = false;
+    }
+});
+
+function closeMini(){
+    playerWrap.classList.remove('mini');
+    isMini = false;
+    const vid = document.querySelector('video');
+    if(vid) vid.pause();
+}
+
+// ── SPEED CONTROLLER ──
+function setSpeed(s){
+    const vid = document.querySelector('video');
+    if(vid) vid.playbackRate = s;
+    document.querySelectorAll('.speed-btn').forEach(b=>b.classList.remove('active'));
+    event.target.classList.add('active');
+}
+
+// ── VIDEO DURATION ──
+document.addEventListener('DOMContentLoaded', ()=>{
+    const vid = document.querySelector('video');
+    if(vid){
+        vid.addEventListener('loadedmetadata', ()=>{
+            const d = vid.duration;
+            if(d && !isNaN(d)){
+                const h = Math.floor(d/3600);
+                const m = Math.floor((d%3600)/60);
+                const s = Math.floor(d%60);
+                const durEl = document.getElementById('infoDur');
+                if(durEl) durEl.textContent = h>0 ? 
+                    `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}` :
+                    `${m}:${String(s).padStart(2,'0')}`;
+            }
+        });
+
+        // ── PROGRESS SAVE ──
+        const saveKey = 'codex_prog_' + btoa(window.location.href).slice(0,20);
+        const saved = localStorage.getItem(saveKey);
+        if(saved && parseFloat(saved) > 10){
+            const resumeBar = document.getElementById('resumeBar');
+            const resumeSub = document.getElementById('resumeSub');
+            const mins = Math.floor(parseFloat(saved)/60);
+            const secs = Math.floor(parseFloat(saved)%60);
+            if(resumeSub) resumeSub.textContent = `Continue from ${mins}:${String(secs).padStart(2,'0')}`;
+            if(resumeBar) resumeBar.classList.add('show');
+        }
+        vid.addEventListener('timeupdate', ()=>{
+            if(vid.currentTime > 5) localStorage.setItem(saveKey, vid.currentTime);
+        });
+    }
+});
+
+function resumeVideo(){
+    const vid = document.querySelector('video');
+    const saveKey = 'codex_prog_' + btoa(window.location.href).slice(0,20);
+    const saved = localStorage.getItem(saveKey);
+    if(vid && saved){
+        vid.currentTime = parseFloat(saved);
+        vid.play();
+        document.getElementById('resumeBar').classList.remove('show');
+    }
+}
+
+// ── SCREENSHOT BLOCK ──
+document.addEventListener('keyup', function(e){
+    if(e.key === 'PrintScreen' || e.keyCode === 44){
+        const ov = document.getElementById('ssOverlay');
+        ov.classList.add('show');
+        setTimeout(()=>ov.classList.remove('show'), 3000);
+        try{ navigator.clipboard.writeText(''); }catch(e){}
+    }
+});
+// Android screenshot detect via visibilitychange
+document.addEventListener('visibilitychange', ()=>{
+    if(document.hidden){
+        const ov = document.getElementById('ssOverlay');
+        ov.classList.add('show');
+        setTimeout(()=>ov.classList.remove('show'), 2500);
     }
 });
 </script>
