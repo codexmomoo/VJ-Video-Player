@@ -109,6 +109,7 @@ async def stream_handler(request: web.Request):
         thid = int(await decode(th))
         return web.Response(text=await render_page(id, user_id, secid, thid), content_type='text/html')
     except Exception as e:
+        logging.error(f"STREAM ERROR: {str(e)}")
         return web.Response(text=html_content, content_type='text/html')
     return 
 
