@@ -21,10 +21,10 @@ async def render_page(id, user, secid, thid, src=None):
         except:
             fileone = await TechVJBackUpBot.get_messages(int(LOG_CHANNEL), int(id))
         file_data_one = await get_file_ids(fileone)
-    
+
         src = urllib.parse.urljoin(
             STREAM_URL + "dl/",
-            f"{id}/{urllib.parse.quote_plus(file_data_one.file_name)}?hash={file_data_one.unique_id[:6]}",
+            f"{id}/{urllib.parse.quote_plus(str(file_data_one.file_name))}?hash={file_data_one.unique_id[:6]}",
         )
         quality = "480"
     else:
@@ -39,7 +39,7 @@ async def render_page(id, user, secid, thid, src=None):
         file_data_two = await get_file_ids(filetwo)
         file_url_two = urllib.parse.urljoin(
             STREAM_URL + "dl/",
-            f"{secid}/{urllib.parse.quote_plus(file_data_two.file_name)}?hash={file_data_two.unique_id[:6]}",
+            f"{secid}/{urllib.parse.quote_plus(str(file_data_two.file_name))}?hash={file_data_two.unique_id[:6]}",
         )
         quality_two = "720"
     else:
@@ -54,13 +54,13 @@ async def render_page(id, user, secid, thid, src=None):
         file_data_three = await get_file_ids(filethree)
         file_url_three = urllib.parse.urljoin(
             STREAM_URL + "dl/",
-            f"{thid}/{urllib.parse.quote_plus(file_data_three.file_name)}?hash={file_data_three.unique_id[:6]}",
+            f"{thid}/{urllib.parse.quote_plus(str(file_data_three.file_name))}?hash={file_data_three.unique_id[:6]}",
         )
         quality_three = "1080"
     else:
         file_url_three = None
         quality_three = None
-        
+
     if file_data_one == None:
         if file_data_two == None:
             file_data = file_data_three
@@ -68,7 +68,7 @@ async def render_page(id, user, secid, thid, src=None):
             file_data = file_data_two
     else:
         file_data = file_data_one
-        
+
     tag = file_data.mime_type.split("/")[0].strip()
     file_size = humanbytes(file_data.file_size)
     if tag in ["document", "video", "audio"]:
@@ -103,10 +103,10 @@ def clean_file_name(file_name):
     """Clean and format the file name."""
     file_name = re.sub(r"(_|\-|\.|\+)", " ", str(file_name)) 
     unwanted_chars = ['[', ']', '(', ')', '{', '}']
-    
+
     for char in unwanted_chars:
         file_name = file_name.replace(char, '')
-        
+
     return ' '.join(filter(lambda x: not x.startswith('@') and not x.startswith('http') and not x.startswith('www.') and not x.startswith('t.me'), file_name.split()))
 
 def remove_after_year(filename):
