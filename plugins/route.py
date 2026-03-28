@@ -151,16 +151,40 @@ async def get_original(request: web.Request):
 
 @routes.get('/link', allow_head=True)
 async def visits(request: web.Request):
+    # Get the full query string after /link?
+    query_string = request.query_string  # e.g. dT04NDM1MjIx...
+    # Try direct params first (u, w, s, t)
     user = request.query.get('u')
     watch = request.query.get('w')
     second = request.query.get('s')
     third = request.query.get('t')
-    data = await encode(watch)
-    user_id = await encode(user)
-    sec_id = await encode(second)
-    th_id = await encode(third)
-    link = f"{STREAM_URL}{data}/{user_id}/{sec_id}/{th_id}"
-    raise web.HTTPFound(link)
+    
+    if user and watch:
+        # Already decoded params
+        data = await encode(watch)
+        user_id = await encode(user)
+        sec_id = await encode(second) if second else await encode('0')
+        th_id = await encode(third) if third else await encode('0')
+        link = f"{STREAM_URL}{data}/{user_id}/{sec_id}/{th_id}"
+        raise web.HTTPFound(link)
+    else:
+        # query_string is the encoded payload - decode it first
+        original = await decode(query_string)
+        if original:
+            from urllib.parse import parse_qs
+            params = dict(p.split('=') for p in original.split('&') if '=' in p)
+            user = params.get('u', '0')
+            watch = params.get('w', '0')
+            second = params.get('s', '0')
+            third = params.get('t', '0')
+            data = await encode(watch)
+            user_id = await encode(user)
+            sec_id = await encode(second)
+            th_id = await encode(third)
+            link = f"{STREAM_URL}{data}/{user_id}/{sec_id}/{th_id}"
+            raise web.HTTPFound(link)
+        else:
+            return web.Response(text=html_content, content_type='text/html')
 
 @routes.get(r"/dl/{path:\S+}", allow_head=True)
 async def stream_handler(request: web.Request):
